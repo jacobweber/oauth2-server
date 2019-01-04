@@ -26,6 +26,28 @@ use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 
+class CustomBearerTokenResponse extends BearerTokenResponse {
+    /* @return null|CryptKey */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
+    }
+
+    public function getEncryptionKey()
+    {
+        return $this->encryptionKey;
+    }
+}
+
+class CustomAuthorizationServer extends AuthorizationServer {
+    protected function getResponseType()
+    {
+        $this->responseType = new CustomBearerTokenResponse();
+
+        return parent::getResponseType();
+    }
+}
+
 class AuthorizationServerTest extends TestCase
 {
     const DEFAULT_SCOPE = 'basic';
@@ -116,25 +138,7 @@ class AuthorizationServerTest extends TestCase
         $privateKey = 'file://' . __DIR__ . '/Stubs/private.key';
         $encryptionKey = 'file://' . __DIR__ . '/Stubs/public.key';
 
-        $server = new class($clientRepository, $this->getMockBuilder(AccessTokenRepositoryInterface::class)->getMock(), $this->getMockBuilder(ScopeRepositoryInterface::class)->getMock(), $privateKey, $encryptionKey) extends AuthorizationServer {
-            protected function getResponseType()
-            {
-                $this->responseType = new class extends BearerTokenResponse {
-                    /* @return null|CryptKey */
-                    public function getPrivateKey()
-                    {
-                        return $this->privateKey;
-                    }
-
-                    public function getEncryptionKey()
-                    {
-                        return $this->encryptionKey;
-                    }
-                };
-
-                return parent::getResponseType();
-            }
-        };
+        $server = new CustomAuthorizationServer($clientRepository, $this->getMockBuilder(AccessTokenRepositoryInterface::class)->getMock(), $this->getMockBuilder(ScopeRepositoryInterface::class)->getMock(), $privateKey, $encryptionKey);
 
         $abstractGrantReflection = new \ReflectionClass($server);
         $method = $abstractGrantReflection->getMethod('getResponseType');
@@ -152,18 +156,7 @@ class AuthorizationServerTest extends TestCase
         $privateKey = 'file://' . __DIR__ . '/Stubs/private.key';
         $encryptionKey = 'file://' . __DIR__ . '/Stubs/public.key';
 
-        $responseTypePrototype = new class extends BearerTokenResponse {
-            /* @return null|CryptKey */
-            public function getPrivateKey()
-            {
-                return $this->privateKey;
-            }
-
-            public function getEncryptionKey()
-            {
-                return $this->encryptionKey;
-            }
-        };
+        $responseTypePrototype = new CustomBearerTokenResponse();
 
         $clientRepository = $this->getMockBuilder(ClientRepositoryInterface::class)->getMock();
 
