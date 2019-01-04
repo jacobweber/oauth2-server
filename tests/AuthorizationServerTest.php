@@ -26,28 +26,6 @@ use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 
-class CustomBearerTokenResponse extends BearerTokenResponse {
-    /* @return null|CryptKey */
-    public function getPrivateKey()
-    {
-        return $this->privateKey;
-    }
-
-    public function getEncryptionKey()
-    {
-        return $this->encryptionKey;
-    }
-}
-
-class CustomAuthorizationServer extends AuthorizationServer {
-    protected function getResponseType()
-    {
-        $this->responseType = new CustomBearerTokenResponse();
-
-        return parent::getResponseType();
-    }
-}
-
 class AuthorizationServerTest extends TestCase
 {
     const DEFAULT_SCOPE = 'basic';
