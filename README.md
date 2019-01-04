@@ -1,3 +1,5 @@
+This fork makes oauth2-server compatible with PHP 5.6.
+
 # PHP OAuth 2.0 Server
 
 [![Latest Version](http://img.shields.io/packagist/v/league/oauth2-server.svg?style=flat-square)](https://github.com/thephpleague/oauth2-server/releases)
