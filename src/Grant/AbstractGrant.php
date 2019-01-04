@@ -294,7 +294,7 @@ abstract class AbstractGrant implements GrantTypeInterface
     {
         $requestParameters = (array) $request->getParsedBody();
 
-        return $requestParameters[$parameter] ?? $default;
+        return isset($requestParameters[$parameter]) ? $requestParameters[$parameter] : $default;
     }
 
     /**

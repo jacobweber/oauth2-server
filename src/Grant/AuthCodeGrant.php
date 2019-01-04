@@ -319,8 +319,9 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
             throw new LogicException('An instance of UserEntityInterface should be set on the AuthorizationRequest');
         }
 
-        $finalRedirectUri = $authorizationRequest->getRedirectUri()
-                          ?? $this->getClientRedirectUri($authorizationRequest);
+        $finalRedirectUri = null !== $authorizationRequest->getRedirectUri()
+                          ? $authorizationRequest->getRedirectUri()
+                          : $this->getClientRedirectUri($authorizationRequest);
 
         // The user approved the client, redirect them back with an auth code
         if ($authorizationRequest->isAuthorizationApproved() === true) {
