@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [jacobweber fork]
 
+### Changed
+- Compatible with PHP 5.6
+
 ### Added
 - Added event emitter for issuing refresh token
 
