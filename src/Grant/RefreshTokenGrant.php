@@ -59,6 +59,11 @@ class RefreshTokenGrant extends AbstractGrant
             }
         }
 
+        $event = $this->getEmitter()->emit(new RequestEvent(RequestEvent::REFRESH_TOKEN_ISSUING, $request));
+        if ($event->isPropagationStopped()) {
+            throw OAuthServerException::accessDenied();
+        }
+
         // Expire old tokens
         $this->accessTokenRepository->revokeAccessToken($oldRefreshToken['access_token_id']);
         $this->refreshTokenRepository->revokeRefreshToken($oldRefreshToken['refresh_token_id']);
