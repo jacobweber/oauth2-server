@@ -10,6 +10,7 @@
 namespace League\OAuth2\Server;
 
 use League\OAuth2\Server\RequestEvent;
+use Psr\Http\Message\ServerRequestInterface;
 
 class RefreshTokenEvent extends RequestEvent
 {
