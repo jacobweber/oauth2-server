@@ -16,7 +16,6 @@ use Exception;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\RequestEvent;
-use League\OAuth2\Server\RefreshTokenEvent;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -58,11 +57,6 @@ class RefreshTokenGrant extends AbstractGrant
             if (in_array($scope->getIdentifier(), $oldRefreshToken['scopes'], true) === false) {
                 throw OAuthServerException::invalidScope($scope->getIdentifier());
             }
-        }
-
-        $event = $this->getEmitter()->emit(new RefreshTokenEvent(RefreshTokenEvent::REFRESH_TOKEN_REFRESHING, $request, $oldRefreshToken));
-        if ($event->isPropagationStopped()) {
-            throw OAuthServerException::accessDenied();
         }
 
         // Expire old tokens
